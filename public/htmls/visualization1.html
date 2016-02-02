@@ -1,0 +1,51 @@
+<html>
+  <head>
+    <title>Visualization #1</title>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+  <script type="text/javascript" src="./javascripts/jquery-1.11.3.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <script>
+    google.charts.load('current', { 'packages': ['map'] });
+    google.charts.setOnLoadCallback(drawMap);
+	
+	
+    function drawMap() {
+		var link = "http://45.55.71.95:3000/station/aggregate"
+		$.get (link, function(datapoints){
+			var alldata = $.parseJSON(datapoints);
+			var points = new Array();
+			points.push(['latitute','longitude','Empty Frequency','Name']);
+			for(var i = 0; i < alldata.length; i++) {
+				if (alldata[i]['count']>500){
+				points.push([alldata[i]["latitude"],
+				alldata[i]['longitude'], 
+				String(alldata[i]['count']),
+				String(alldata[i]['_id'])]);}
+				}
+			console.log(points);
+			
+		var data = google.visualization.arrayToDataTable(points);
+
+		 var options = {
+		  width: 400,
+		  height: 600,
+		 // vAxis: {minValue:0, maxValue:1000},
+		  sizeAxis: { minValue: 0, maxValue: 600},
+		  dataMode: 'markers',
+		  showTip:true,
+		};
+
+		var map = new google.visualization.Map(document.getElementById('chart_div'));
+
+		map.draw(data, options);
+	});    
+  };
+  </script>
+  </head>
+  <body>
+  	<h1> Stations with more than 500 empty dock events from July 2015 to February 2016</h1>
+    <div id="chart_div"></div>
+  </body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+	<script type="text/javascript" src="./javascripts/jquery-1.11.3.min.js"></script>
+
+    <title>Visualization #2</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 70%;
+      }
+    </style>
+  </head>
+  <body>
+	<h1> Month by Month Citibike Docks with the most empty stations</h1>
+    <div id="map"></div>
+	<br></br>
+	<select id="selectMonth">
+	  <option value="2016-02-01" selected="selected">January 2016</option>
+	  <option value="2016-01-01">December 2015</option>
+	  <option value="2015-12-01">November 2015</option>
+	  <option value="2015-11-01">October 2015</option>
+	  <option value="2015-10-01">September 2015</option>
+	  <option value="2015-09-01">August 2015</option>
+	</select>
+   
+   <script>
+
+function initMap() {
+
+  var selected = $("#selectMonth").val()
+  console.log(selected);
+  
+  var myLatLng = {lat: 40.735, lng: -74};
+
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 12,
+    center: myLatLng
+  });
+
+  var link = "http://45.55.71.95:3000/station/month/"+String(selected);
+  var redCircle = {
+	path: google.maps.SymbolPath.CIRCLE,
+	fillOpacity: .35,
+	fillColor: '#FF0000',
+	strokeOpacity: .8,
+	strokeColor: '#FF0000',
+	strokeWeight: 1.0,
+	scale: 10
+  };
+  var blackCircle ={
+	path: google.maps.SymbolPath.CIRCLE,
+	fillOpacity: .35,
+	fillColor: '#808080',
+	strokeOpacity: .8,
+	strokeColor: '#000000',
+	strokeWeight: 1.0,
+	scale: 10
+  };
+  $.get (link, function(datapoints){
+	var alldata = $.parseJSON(datapoints);
+	console.log(alldata);
+	for(var i = 0; i < alldata.length; i++) {
+		if (alldata[i]['count'] >100){
+		var marker = new google.maps.Marker({	
+			icon: redCircle,
+			position: {lat: alldata[i]["latitude"], 
+					   lng: alldata[i]["longitude"]},
+			map: map,
+			title: String(alldata[i]['_id'] + " \n"+String(alldata[i]['count'])+ " Empty Station Events")
+		});
+		}
+		
+  	}
+	});
+}
+	$('select').on('change', function() {// Vue component define
+			initMap()
+	});
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB3hvVB6dwm1k2yOOW1uFqX2MsxRevdyko&signed_in=true&callback=initMap"></script>
+  </body>
+</html>

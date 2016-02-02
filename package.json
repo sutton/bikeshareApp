@@ -1,0 +1,25 @@
+{
+  "name": "bikeshareapp",
+  "version": "1.0.0",
+  "description": "app to visualize data for Data Incubator application",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sutton/bikeshareApp.git"
+  },
+  "author": "Sutton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sutton/bikeshareApp/issues"
+  },
+  "homepage": "https://github.com/sutton/bikeshareApp#readme",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "cookie-parser": "^1.4.1",
+    "express": "^4.13.4",
+    "path": "^0.12.7"
+  }
+}
